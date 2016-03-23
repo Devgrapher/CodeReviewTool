@@ -14,6 +14,9 @@ IMPLEMENT_DYNAMIC(CFileListView, CDialogEx)
 CFileListView::CFileListView(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_FILESELECT, pParent)
 {
+	// 아래 멤버들이 포인터임에도 생성자에서 초기화 되지 않았습니다.
+	//std::list<CReviewData>* m_reviews;
+	//std::list<CString>* m_revisions;
 
 }
 
@@ -96,8 +99,10 @@ void CFileListView::ClearRevisionLB()
 void CFileListView::OnLbnDblclkCodefile()
 {
 	CString filepath;
+	// NULL초기화를 하지 않았네요.
+	// 밑에서 초기화와 동시에 선언했다면 이럴 필요도 없겠죠
 	CMainFrame* mf;
-	
+
 	m_fileNameListBox.GetText(m_fileNameListBox.GetCurSel(), filepath);
 	mf = (CMainFrame*)AfxGetMainWnd();
 	mf->PrintAllTextDataOnEditCtrl(filepath);

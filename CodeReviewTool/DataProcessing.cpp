@@ -26,11 +26,18 @@ bool CDataProcessing::GetTextFromFile(LPWSTR filepath, CString& contents)
 	
 	fileSize = reviewFile.GetLength();
 
+	// 여기서 꼭 동적으로 메모리를 할당할 필요는 없을것 같습니다.
+	// 고정사이즈 배열에 데이터를 반복해서 받는게 더 낫지 않나 싶습니다.
+	// 동적메모리 관리는 항상 번거로우니까요.
+	// 혹은 std::vector를 써도 좋겠죠.
+	// 이렇게 Raw 메모리를 직접 할당하는건 코드 유지보수관점에서 지양해야겠습니다.
 	buffer = new char[fileSize + 1];
 	buffer[fileSize] = '\0';
 
 	reviewFile.Read(buffer, reviewFile.GetLength());
 
+	// CString의 생성자를 이용하면 유니코드 변경이 간단하게 됩니다.
+	// 혹은 CA2W 클래스를 찾아보세요
 	contents = ConvertMultibyteToUnicode(buffer);
 
 	delete[] buffer;
@@ -104,6 +111,9 @@ CString CDataProcessing::ConvertMultibyteToUnicode(LPSTR pMultibyte)
 
 bool CDataProcessing::FillReviewData()
 {
+	// 한 라인에 하나의 변수를 선언합시다.
+	// 함수 초반에 모든 변수를 선언해두는 방식은 코드 이해에 방해가 됩니다.
+	// 실제 사용하는 위치에서 선언하는게 좋습니다.
 	CString oneLine, tmpString, revision, tmpComment;
 	int index = 0, tmpIndex = 0;
 	CReviewData tempReviewData;
@@ -278,7 +288,9 @@ bool CDataProcessing::GetReviewNCodeText(CString filepath, CString* reviewText, 
 	{
 		if (filepath.CompareNoCase(iter->GetFilePath()) == 0)
 		{
-			m_currentReviewData = (CReviewData*)&(*iter);
+			// 불필요한 캐스팅입니다. 아래와 같이 해도 충분합니다.
+			// 혹시 캐스팅이 필요하다면 C스타일 캐스팅보단 static_cast<>와같은 c++스타일이 권장됩니다.	
+			m_currentReviewData = &(*iter);
 			m_currentReviewData->InitLineNumber();
 			iter->GetReviewNSourceCode(reviewText, sourceCodeText);
 			return true;

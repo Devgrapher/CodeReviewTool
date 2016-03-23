@@ -24,6 +24,7 @@ void CReviewData::SetRevision(CString revision)
 
 void CReviewData::AddComments(CString comments)
 {
+	// empty여도 AppendFormat이 호출이 문제 없을텐데요..
 	if (m_comments.IsEmpty())
 	{
 		m_comments.Format(L"%s\r\n", comments);
@@ -106,6 +107,7 @@ void CReviewData::InitLineNumber()
 
 void CReviewData::GetReviewNSourceCode(CString* review, CString* sourceCode)
 {
+	// 포인터는 널체크를 항상 해줍시다.
 	*review = m_comments;
 	*sourceCode = m_sourceCode;
 }

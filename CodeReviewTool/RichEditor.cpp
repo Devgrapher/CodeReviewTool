@@ -89,7 +89,8 @@ void CRichEditor::PrintLineNumber(CDC* hdc)
 void CRichEditor::ScrollEditor(int lineNumber)
 {
 	int firstVisibleLine = this->GetFirstVisibleLine();
-	
+
 	int distance = lineNumber - firstVisibleLine;
+	// 4가 무엇을 뜻하는건가요? const int로 상수를 선언해두고 사용하면 코드가독성에 도움이 됩니다.
 	LineScroll(distance - 4, 0);
 }

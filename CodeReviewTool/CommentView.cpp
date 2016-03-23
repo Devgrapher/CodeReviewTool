@@ -10,9 +10,10 @@
 
 IMPLEMENT_DYNCREATE(CCommentView, CView)
 
+// 보통은 아래와 같이 생성자 초기화리스트를 사용합니다.
 CCommentView::CCommentView()
+	: m_commentSourceCode(NULL)
 {
-	m_commentSourceCode = NULL;
 }
 
 CCommentView::~CCommentView()
